@@ -3,38 +3,38 @@ Don - json templating
 
 Data defs:
 
-An htmlArray is an array with either:
+An htmlArray is an array adhering to any of the following forms:
 
- [elementType]
- [elementType, contents...]
- [elementType, attributes]
- [elementType, attributes, contents...]
- []
- [htmlArray...]
- 
- where
-    - elementType is a string, e.g: "div"
-    - contents is either one or more of:
-        a string, e.g: "my title", or
-        an htmlArray
-    - attributes is a js object, e.g: {id:"mydiv"}
+    [elementType]
+    [elementType, contents...]
+    [elementType, attributes]
+    [elementType, attributes, contents...]
+    []
+    [htmlArray...]
+
+    where
+        - elementType is a string, e.g: "div"
+        - contents is an arbitrary number of:
+            - a string or a number
+            - an htmlArray
+        - attributes is a js object, e.g: {id:"mydiv"}
 
 examples:
 
-htmlArray1 = ["br"]
-htmlArray2 = ["h1", "page title"]
-htmlArray3 = ["h1", 
-                "page title",
-                ["span", "subtitle"]]
-                
-htmlArray4 = ["meta", {name:"description", content:"some webpage"}]
-htmlArray5 = ["article", {id:123}, "the article content"]
-htmlArray6 = ["article", {id:123}, 
-                "the article content",
-                ["a", {href:"#"}, "some link"]]
-                
-htmlArray7 = []
-htmlArray8 = [["br"],["br"]]
+    htmlArray1 = ["br"]
+    htmlArray2 = ["h1", "page title"]
+    htmlArray3 = ["h1", 
+                    "page title",
+                    ["span", "subtitle"]]
+                    
+    htmlArray4 = ["meta", {name:"description", content:"some webpage"}]
+    htmlArray5 = ["article", {id:123}, "the article content"]
+    htmlArray6 = ["article", {id:123}, 
+                    "the article content",
+                    ["a", {href:"#"}, "some link"]]
+                    
+    htmlArray7 = []
+    htmlArray8 = [["br"],["br"]]
 ###
 
 
