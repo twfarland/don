@@ -64,7 +64,7 @@ Don = ->
     e.g: {id:123,class:"someclass"} -> ' id="123" class="someclass"'
     ###    
     renderAttrs = (attrObj) ->    
-        ((' ' + attr + '="' + val + '"') for attr, val of attrObj).join ""
+        ([" ",attr,'="',val,'"'].join "" for attr, val of attrObj).join ""
         
 
     ###
@@ -85,41 +85,63 @@ Don = ->
         else        
             #[elementType] 
             if arr.length is 1
-                "<" + arr[0] + ">"    
+                ["<",arr[0],">"].join ""   
                              
             else                 
                 if toString.call(arr[1]) is '[object Object]' 
                 
                     #[elementType, attributes] 
                     if arr.length is 2                    
-                        "<" + arr[0] + renderAttrs(arr[1]) + ">" 
+                        ["<",arr[0],renderAttrs(arr[1]),">"].join ""
                                                
                     #[elementType, attributes, content...]
                     else
-                        "<" + arr[0] + renderAttrs(arr[1]) + ">" +
-                         renderInner(arr[2..]) +
-                         "</" + arr[0] + ">" 
+                        ["<",arr[0],renderAttrs(arr[1]),">",
+                         renderInner(arr[2..]),
+                         "</",arr[0],">"].join ""
                                        
                 #[elementType, content...]   
                 else 
-                    "<" + arr[0] + ">" + 
-                    renderInner(arr[1..]) + 
-                    "</" + arr[0] + ">" 
+                    ["<",arr[0],">",
+                    renderInner(arr[1..]),
+                    "</",arr[0],">"].join ""
                                
                                
                                  
-    #expose raw convertor for testing
+    #expose raw convertor
     @toHtml = toHtml
     
     
-    #calls the template function within the given data object
-    @render = (template, data, partials) ->
-        toHtml template.call data
-        
-        
+    
+     #normal render, where closures are used
+    @render = (data, template, key) ->
+          
+        toHtml template(data, key)
+    
     #renders a template for each item in an array, and collapses into an html string    
-    @mapRender = (template, dataArr) ->
-        (@render(template, elem) for elem in dataArr).join ""
+    @mapRender = (dataArr, template) ->
+    
+        (@render(data, template, key) for key, data of dataArr).join ""
+        
+    @map = @mapRender
+    
+    
+    
+    
+    #calls the template function within the given data object, so its vars are accesed with @
+    @renderIn = (data, template, key, parent) ->
+                  
+        toHtml template.call data, key, parent        
+        
+    #renders a template within each item in an array, and collapses into an html string    
+    @mapRenderIn = (dataArr, template, parent) ->
+    
+        (@renderIn(data, template, key, parent) for key, data of dataArr).join ""
+        
+    @mapIn = @mapRenderIn #alias    
+    
+   
+        
         
     @
     

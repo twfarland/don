@@ -4,38 +4,38 @@
 
   Data defs:
 
-  An htmlArray is an array with either:
+  An htmlArray is an array adhering to any of the following forms:
 
-   [elementType]
-   [elementType, contents...]
-   [elementType, attributes]
-   [elementType, attributes, contents...]
-   []
-   [htmlArray...]
+      [elementType]
+      [elementType, contents...]
+      [elementType, attributes]
+      [elementType, attributes, contents...]
+      []
+      [htmlArray...]
 
-   where
-      - elementType is a string, e.g: "div"
-      - contents is either one or more of:
-          a string, e.g: "my title", or
-          an htmlArray
-      - attributes is a js object, e.g: {id:"mydiv"}
+      where
+          - elementType is a string, e.g: "div"
+          - contents is an arbitrary number of:
+              - a string or a number
+              - an htmlArray
+          - attributes is a js object, e.g: {id:"mydiv"}
 
   examples:
 
-  htmlArray1 = ["br"]
-  htmlArray2 = ["h1", "page title"]
-  htmlArray3 = ["h1",
-                  "page title",
-                  ["span", "subtitle"]]
+      htmlArray1 = ["br"]
+      htmlArray2 = ["h1", "page title"]
+      htmlArray3 = ["h1",
+                      "page title",
+                      ["span", "subtitle"]]
 
-  htmlArray4 = ["meta", {name:"description", content:"some webpage"}]
-  htmlArray5 = ["article", {id:123}, "the article content"]
-  htmlArray6 = ["article", {id:123},
-                  "the article content",
-                  ["a", {href:"#"}, "some link"]]
+      htmlArray4 = ["meta", {name:"description", content:"some webpage"}]
+      htmlArray5 = ["article", {id:123}, "the article content"]
+      htmlArray6 = ["article", {id:123},
+                      "the article content",
+                      ["a", {href:"#"}, "some link"]]
 
-  htmlArray7 = []
-  htmlArray8 = [["br"],["br"]]
+      htmlArray7 = []
+      htmlArray8 = [["br"],["br"]]
   */  var Don, isArray, root, toString;
   root = this;
   isArray = Array.isArray || (function(elem) {
@@ -70,7 +70,7 @@
         _results = [];
         for (attr in attrObj) {
           val = attrObj[attr];
-          _results.push(' ' + attr + '="' + val + '"');
+          _results.push([" ", attr, '="', val, '"'].join(""));
         }
         return _results;
       })()).join("");
@@ -96,36 +96,53 @@
         return "";
       } else {
         if (arr.length === 1) {
-          return "<" + arr[0] + ">";
+          return ["<", arr[0], ">"].join("");
         } else {
           if (toString.call(arr[1]) === '[object Object]') {
             if (arr.length === 2) {
-              return "<" + arr[0] + renderAttrs(arr[1]) + ">";
+              return ["<", arr[0], renderAttrs(arr[1]), ">"].join("");
             } else {
-              return "<" + arr[0] + renderAttrs(arr[1]) + ">" + renderInner(arr.slice(2)) + "</" + arr[0] + ">";
+              return ["<", arr[0], renderAttrs(arr[1]), ">", renderInner(arr.slice(2)), "</", arr[0], ">"].join("");
             }
           } else {
-            return "<" + arr[0] + ">" + renderInner(arr.slice(1)) + "</" + arr[0] + ">";
+            return ["<", arr[0], ">", renderInner(arr.slice(1)), "</", arr[0], ">"].join("");
           }
         }
       }
     };
     this.toHtml = toHtml;
-    this.render = function(template, data, partials) {
-      return toHtml(template.call(data));
+    this.render = function(data, template, key) {
+      return toHtml(template(data, key));
     };
-    this.mapRender = function(template, dataArr) {
-      var elem;
+    this.mapRender = function(dataArr, template) {
+      var data, key;
       return ((function() {
-        var _i, _len, _results;
+        var _results;
         _results = [];
-        for (_i = 0, _len = dataArr.length; _i < _len; _i++) {
-          elem = dataArr[_i];
-          _results.push(this.render(template, elem));
+        for (key in dataArr) {
+          data = dataArr[key];
+          _results.push(this.render(data, template, key));
         }
         return _results;
       }).call(this)).join("");
     };
+    this.map = this.mapRender;
+    this.renderIn = function(data, template, key, parent) {
+      return toHtml(template.call(data, key, parent));
+    };
+    this.mapRenderIn = function(dataArr, template, parent) {
+      var data, key;
+      return ((function() {
+        var _results;
+        _results = [];
+        for (key in dataArr) {
+          data = dataArr[key];
+          _results.push(this.renderIn(data, template, key, parent));
+        }
+        return _results;
+      }).call(this)).join("");
+    };
+    this.mapIn = this.mapRenderIn;
     return this;
   };
   root.Don = new Don();

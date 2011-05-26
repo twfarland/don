@@ -1,21 +1,8 @@
 (function() {
-  var Don, articleTemplate, blogTemplate, root, views;
+  var Don, blogTemplate, root, views;
   Don = require('../don.js').Don;
   root = this;
-  articleTemplate = function() {
-    return [
-      "article", {
-        id: this.id
-      }, ["h3", this.title], [
-        "div", this.body, [
-          "a", {
-            href: this.link
-          }, this.anchor
-        ]
-      ]
-    ];
-  };
-  blogTemplate = function() {
+  blogTemplate = function(blog) {
     return [
       ["!doctype html"], [
         "html", [
@@ -23,13 +10,25 @@
             "meta", {
               charset: "utf-8"
             }
-          ], ["title", this.title]
+          ], ["title", blog.title]
         ], [
           "body", [
-            "section", ["h1", this.title], [
+            "section", ["h1", blog.title], [
               "div", {
                 "class": "articles"
-              }, Don.mapRender(articleTemplate, this.articles)
+              }, Don.map(blog.articles, function(article) {
+                return [
+                  "article", {
+                    id: article.id
+                  }, ["h3", article.title], [
+                    "div", article.body, [
+                      "a", {
+                        href: article.link
+                      }, article.anchor
+                    ]
+                  ]
+                ];
+              })
             ]
           ]
         ]
@@ -39,7 +38,7 @@
   views = function() {
     return {
       home: function(data) {
-        return Don.render(blogTemplate, data);
+        return Don.render(data, blogTemplate);
       }
     };
   };

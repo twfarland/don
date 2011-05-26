@@ -4,25 +4,26 @@ Don = require('../don.js').Don
 root = this
 
 
-#template functions
-articleTemplate = ->
-    ["article", {id: @id}
-        ["h3", @title]
-        ["div", 
-            @body,
-            ["a", {href:@link}, @anchor]]]
  
  
-blogTemplate = ->
+blogTemplate = (blog) ->
    [["!doctype html"],
     ["html",
         ["head",
             ["meta", {charset:"utf-8"}],
-            ["title", @title]]
+            ["title", blog.title]]
         ["body",
             ["section",
-                ["h1", @title],
-                ["div", {class:"articles"}, Don.mapRender(articleTemplate, @articles)]]]]]
+                ["h1", blog.title],
+                ["div", {class:"articles"}, Don.map(blog.articles, (article) ->
+                
+                    ["article", {id: article.id},
+                        ["h3", article.title]
+                        ["div", 
+                            article.body,
+                            ["a", {href:article.link}, article.anchor]]]
+                            
+                )]]]]]
             
         
  
@@ -31,7 +32,7 @@ blogTemplate = ->
 views = ->
 
     home : (data) ->
-        Don.render blogTemplate, data 
+        Don.render data, blogTemplate 
        
        
 #provide to root    

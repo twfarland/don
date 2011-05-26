@@ -21,7 +21,7 @@
       }, {
         id: 789,
         title: "my article 3",
-        body: "article3 body",
+        body: "article3 beh",
         link: "#",
         anchor: "my link3"
       }
@@ -32,6 +32,6 @@
       'Content-Type': 'text/html'
     }, 201);
   });
-  app.listen(3000);
-  console.log('Server running at http://localhost:3000/');
+  app.listen(4000);
+  console.log('Server running at http://localhost:4000/');
 }).call(this);
