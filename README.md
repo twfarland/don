@@ -25,12 +25,15 @@ All examples given in Coffeescript unless otherwise noted.
 
     #template functions take the data and its key
     articleTemplate = (data, key) ->
-        ["article", {id: a.id + key}
-            ["h3", a.title]
+        ["article", {id: data.id + key}
+            ["h3", data.title]
             ["div", 
-                a.body]]
+                data.body]]
                 
-    Don.render articleTemplate, {id:123, title:"My Article", body:"Article text"}
+    Don.render(
+       {id:123, title:"My Article", body:"Article text"},
+       articleTemplate
+    )
                 
     # => '<article id="123"><h3>My Article</h3><div>Article text</div></article>'
 
@@ -74,7 +77,7 @@ examples:
 
 ###Mapping a template rendering on an array 
 
-Don.mapRender() takes a template and an array of htmlArrays and returns a string that is the result of rendering each htmlArray in the array with the given template:
+Don.map() takes a template and an array of htmlArrays and returns a string that is the result of rendering each htmlArray in the array with the given template:
 
     colourTemplate = (c) ->
         ["div", {id:"c"+ c.id}, c.colour]
@@ -83,7 +86,7 @@ Don.mapRender() takes a template and an array of htmlArrays and returns a string
              {id:2, colour:"blue"}
              {id:3, colour:"green"}]
              
-    Don.mapRender colourTemplate, data
+    Don.map data, colourTemplate
     
     # => '<div id="c1">red</div><div id="c2">blue</div><div id="c3">green</div>'
     
@@ -107,7 +110,7 @@ You can nest template renderings within other templates:
             ["body",
                 ["section",
                     ["h1", b.title],
-                    ["div", {class:"articles"}, Don.map(articleTemplate, b.articles)]]]]]    
+                    ["div", {class:"articles"}, Don.map(b.articles, articleTemplate)]]]]]    
 
 
 Or use the power of closures:
@@ -115,11 +118,10 @@ Or use the power of closures:
     categoryTemplate = (c, ckey) ->
         ["section", {class:"category"},
             ["h4", c.title]
-            Don.map((s, skey) ->
+            Don.map(s.content, ((s, skey) ->
                 ["div", {class: subcategory, "data-ref": ckey + "." + skey},
-                  ["h5", s.title]
-                  s.content]
-            )]
+                  ["h5", s.title]]
+            ))]
             
 
 You can also use 'renderIn' and 'mapIn', which calls the template function within the given data, allowing for templates that access the 'this,' like:
