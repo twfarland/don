@@ -1,7 +1,8 @@
 { "name": "don"
 , "version": "0.0.1"
-, "author": "Tim Farland"
+, "author": "Tim Farland <twfarland@gmail.com>"
+, "repository": "https://github.com/twfarland/don"
 , "description": "Lispy html templating DSL"
 , "homepage": "http://github.com/twfarland/don"
-, "main": "lib"
+, "main": "lib/don"
 }
