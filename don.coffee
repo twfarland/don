@@ -1,3 +1,9 @@
+###
+Don.js - embedding templating dsl
+By Tim Farland
+http://github.com/twfarland/don
+###
+
 root = @
 
 
@@ -37,17 +43,16 @@ Don = ->
         else if arr.length is 1
                 '<' + arr[0] + '>'
 
-        else
-                if toString.call(arr[1]) is '[object Object]'
+        else if toString.call(arr[1]) is '[object Object]'
 
-                        if arr.length is 2
-                                '<' + arr[0] + renderAttrs(arr[1]) + '>'
-
-                        else
-                                '<' + arr[0] + renderAttrs(arr[1]) + '>' + renderInner(arr[2..]) + '</' + arr[0] + '>'
+                if arr.length is 2
+                        '<' + arr[0] + renderAttrs(arr[1]) + '>'
 
                 else
-                    '<' + arr[0] + '>' + renderInner(arr[1..]) + '</' + arr[0] + '>'
+                        '<' + arr[0] + renderAttrs(arr[1]) + '>' + renderInner(arr[2..]) + '</' + arr[0] + '>'
+
+        else
+               '<' + arr[0] + '>' + renderInner(arr[1..]) + '</' + arr[0] + '>'
 
 
 
@@ -59,28 +64,8 @@ Don = ->
         toHtml template(data, key)
 
 
-    @mapRender = (dataArr, template) ->
-        res = ""
-        for key, data of dataArr
-                res += @render data, template, key
-        res
-
-
-    @map = @mapRender
-
-
     @renderIn = (data, template, key, parent) ->
         toHtml template.call data, key, parent
-
-
-    @mapRenderIn = (dataArr, template, parent) ->
-        res = ""
-        for key, data of dataArr
-                res += @renderIn data, template, key, parent
-        res
-
-
-    @mapIn = @mapRenderIn
 
 
     @

@@ -1,9 +1,5 @@
 (function() {
-  var app, http, myblog, views;
-
-  http = require('http');
-
-  app = require('express').createServer();
+  var myblog, views;
 
   views = require('./views/views.js').views;
 
@@ -32,14 +28,6 @@
     ]
   };
 
-  app.get('/', function(req, res) {
-    return res.send(views.home(myblog), {
-      'Content-Type': 'text/html'
-    }, 201);
-  });
-
-  app.listen(4000);
-
-  console.log('Server running at http://localhost:4000/');
+  console.log(views.home(myblog));
 
 }).call(this);

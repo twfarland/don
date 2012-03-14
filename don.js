@@ -1,5 +1,12 @@
+
+/*
+Don.js - embedding templating dsl
+By Tim Farland
+http://github.com/twfarland/don
+*/
+
 (function() {
-  var Don, isArray, root, test, toString;
+  var Don, isArray, root, toString;
 
   root = this;
 
@@ -42,62 +49,26 @@
         return '';
       } else if (arr.length === 1) {
         return '<' + arr[0] + '>';
-      } else {
-        if (toString.call(arr[1]) === '[object Object]') {
-          if (arr.length === 2) {
-            return '<' + arr[0] + renderAttrs(arr[1]) + '>';
-          } else {
-            return '<' + arr[0] + renderAttrs(arr[1]) + '>' + renderInner(arr.slice(2)) + '</' + arr[0] + '>';
-          }
+      } else if (toString.call(arr[1]) === '[object Object]') {
+        if (arr.length === 2) {
+          return '<' + arr[0] + renderAttrs(arr[1]) + '>';
         } else {
-          return '<' + arr[0] + '>' + renderInner(arr.slice(1)) + '</' + arr[0] + '>';
+          return '<' + arr[0] + renderAttrs(arr[1]) + '>' + renderInner(arr.slice(2)) + '</' + arr[0] + '>';
         }
+      } else {
+        return '<' + arr[0] + '>' + renderInner(arr.slice(1)) + '</' + arr[0] + '>';
       }
     };
     this.toHtml = toHtml;
     this.render = function(data, template, key) {
       return toHtml(template(data, key));
     };
-    this.mapRender = function(dataArr, template) {
-      var data, key, res;
-      res = "";
-      for (key in dataArr) {
-        data = dataArr[key];
-        res += this.render(data, template, key);
-      }
-      return res;
-    };
-    this.map = this.mapRender;
     this.renderIn = function(data, template, key, parent) {
       return toHtml(template.call(data, key, parent));
     };
-    this.mapRenderIn = function(dataArr, template, parent) {
-      var data, key, res;
-      res = "";
-      for (key in dataArr) {
-        data = dataArr[key];
-        res += this.renderIn(data, template, key, parent);
-      }
-      return res;
-    };
-    this.mapIn = this.mapRenderIn;
     return this;
   };
 
   root.Don = new Don();
-
-  test = new Don();
-
-  console.log(test.render({
-    cls: "ok",
-    body: "wat"
-  }, function(d) {
-    return [
-      "div", {
-        "class": d.cls,
-        ok: "yep"
-      }, ["p", d.body]
-    ];
-  }));
 
 }).call(this);

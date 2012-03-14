@@ -17,6 +17,17 @@ These template functions are transformed into html by Don.render()
 
 All examples given in Coffeescript unless otherwise noted.
 
+Benefits:
+ - Terse, but remains normal js
+ - Use the bracket matching of your favourite editor
+ - Js syntax checking can help spot malformed html
+ - No complicated abstractions or syntax to learn
+ - Use js data directly in templates (e.g. objects as tag attributes)
+ - Fast enough without a compilation step
+ - Flexible
+
+Note: I've also included an experimental Ruby version.
+
 
 ###Node usage
     
