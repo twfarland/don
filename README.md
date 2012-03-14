@@ -18,13 +18,13 @@ These template functions are transformed into html by Don.render()
 All examples given in Coffeescript unless otherwise noted.
 
 Benefits:
- - Terse, but remains normal js
- - Use the bracket matching of your favourite editor
- - Js syntax checking can help spot malformed html
- - No complicated abstractions or syntax to learn
- - Use js data directly in templates (e.g. objects as tag attributes)
- - Fast enough without a compilation step
- - Flexible
+- Terse, but remains normal js
+- Use the bracket matching of your favourite editor
+- Js syntax checking can help spot malformed html
+- No complicated abstractions or syntax to learn
+- Use js data directly in templates (e.g. objects as tag attributes)
+- Fast enough without a compilation step
+- Flexible
 
 Note: I've also included an experimental Ruby version.
 
@@ -57,8 +57,7 @@ You can use the power of closures to implement partials (a layout is a function 
                 d.body
                 ['a', {href: d.link}, d.anchor]]]     
      
-    layout = (partial) ->
-       (d) ->
+    layout = (partial) -> (d) ->
           [['!doctype html']
            ['html'
                ['head'
@@ -95,25 +94,25 @@ An htmlArray is an array with either:
  
 where:
 
-- elementType is a string, e.g: "div"
+- elementType is a string, e.g: 'div'
 - contents is an arbitrary number of:
  - string, or
  - htmlArray
-- attributes is a js object, e.g: {id:"mydiv"}
+- attributes is a js object, e.g: {id: 'mydiv'}
 
 examples:
 
-    htmlArray1 = ["br"]
-    htmlArray2 = ["h1", "page title"]
-    htmlArray3 = ["h1", 
-                    "page title",
-                    ["span", "subtitle"]]
+    htmlArray1 = ['br']
+    htmlArray2 = ['h1', 'page title']
+    htmlArray3 = ['h1' 
+                    'page title'
+                    ['span', 'subtitle']]
                     
-    htmlArray4 = ["meta", {name:"description", content:"some webpage"}]
-    htmlArray5 = ["article", {id:123}, "the article content"]
-    htmlArray6 = ["article", {id:123}, 
-                    "the article content",
-                    ["a", {href:"#"}, "some link"]]
+    htmlArray4 = ['meta', {name: 'description', content: 'some webpage'}]
+    htmlArray5 = ['article', {id: 123}, 'the article content']
+    htmlArray6 = ['article', {id: 123} 
+                    'the article content'
+                    ['a', {href: '#'}, 'some link']]
                     
     htmlArray7 = []
-    htmlArray8 = [["br"],["br"]]
+    htmlArray8 = [['br'], ['br']]

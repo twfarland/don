@@ -1,0 +1,7 @@
+{ "name": "don"
+, "version": "0.0.1"
+, "author": "Tim Farland"
+, "description": "Lispy html templating DSL"
+, "homepage": "http://github.com/twfarland/don"
+, "main": "lib"
+}
