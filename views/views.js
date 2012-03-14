@@ -1,7 +1,10 @@
 (function() {
   var Don, blogTemplate, root, views;
+
   Don = require('../don.js').Don;
+
   root = this;
+
   blogTemplate = function(blog) {
     return [
       ["!doctype html"], [
@@ -35,6 +38,7 @@
       ]
     ];
   };
+
   views = function() {
     return {
       home: function(data) {
@@ -42,5 +46,7 @@
       }
     };
   };
+
   root.views = new views();
+
 }).call(this);

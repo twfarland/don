@@ -3,7 +3,7 @@
 'Document Object Notation'
 An embedded html templating DSL in Javascript
 
-Released under the MIT license.
+No license. Do what you want with this.
 Creator: [Tim Farland](http://timfarland.com)
 
 
@@ -15,27 +15,62 @@ Don templates are functions that return nested arrays (where variables are attac
 
 Template functions are transformed into html by Don.render()
 
-For terser syntax, use with Coffeescript or Sibilant.
-
 All examples given in Coffeescript unless otherwise noted.
+
 
 ###Node usage
     
     Don = require('../don.js').Don
 
-    #template functions take the data and its key
     articleTemplate = (data, key) ->
-        ["article", {id: data.id + key}
-            ["h3", data.title]
-            ["div", 
-                data.body]]
+        ['article', {id: data.id + key}
+            ['h3', data.title]
+            ['div', data.body]]
                 
     Don.render(
-       {id:123, title:"My Article", body:"Article text"},
+       {id: 123, title: 'My Article', body: 'Article text'},
        articleTemplate
     )
                 
     # => '<article id="123"><h3>My Article</h3><div>Article text</div></article>'
+
+
+###Partials
+
+You can use the power of closures to implement partials (a layout is a function that takes a template and returns a template):
+
+    partial = (d) ->
+
+        ['article', {id: d.id}
+            ['h3', d.title]
+            ['div'
+                d.body
+                ['a', {href: d.link}, d.anchor]]]     
+     
+    layout = (partial) ->
+
+       (d) ->
+
+          [['!doctype html']
+           ['html'
+               ['head'
+                   ['meta', charset: 'utf-8']
+                   ['title', d.title]]
+               ['body'
+                   ['section'
+                       ['h1', d.title]
+                       ['div', {class: 'articles'}, (partial a for a in d.articles)]]]]]    
+
+
+###Render inside
+
+You can also use 'renderIn', which calls the template function within the given data, allowing for templates that access the 'this,' like:
+
+    articleTemplate = ->
+        ['article', {id: @id}
+            ['h3', @title]
+            ['div', @body]]
+
 
 ###Acceptable forms
 
@@ -53,9 +88,9 @@ An htmlArray is an array with either:
 where:
 
 - elementType is a string, e.g: "div"
-- contents is either one or more of:
- - a string, e.g: "my title", or
- - an htmlArray
+- contents is an arbitrary number of:
+ - string, or
+ - htmlArray
 - attributes is a js object, e.g: {id:"mydiv"}
 
 examples:
@@ -74,60 +109,3 @@ examples:
                     
     htmlArray7 = []
     htmlArray8 = [["br"],["br"]]
-
-###Mapping a template rendering on an array 
-
-Don.map() takes a template and an array of htmlArrays and returns a string that is the result of rendering each htmlArray in the array with the given template:
-
-    colourTemplate = (c) ->
-        ["div", {id:"c"+ c.id}, c.colour]
-
-    data = [{id:1, colour:"red"}
-             {id:2, colour:"blue"}
-             {id:3, colour:"green"}]
-             
-    Don.map data, colourTemplate
-    
-    # => '<div id="c1">red</div><div id="c2">blue</div><div id="c3">green</div>'
-    
-###Partials
-
-You can nest template renderings within other templates:
-
-    articleTemplate = (a) ->
-        ["article", {id: a.id}
-            ["h3", a.title]
-            ["div", 
-                a.body,
-                ["a", {href:a.link}, a.anchor]]]     
-     
-    blogTemplate = (b) ->
-       [["!doctype html"],
-        ["html",
-            ["head",
-                ["meta", {charset:"utf-8"}],
-                ["title", b.title]]
-            ["body",
-                ["section",
-                    ["h1", b.title],
-                    ["div", {class:"articles"}, Don.map(b.articles, articleTemplate)]]]]]    
-
-
-Or use the power of closures:
-
-    categoryTemplate = (c, ckey) ->
-        ["section", {class:"category"},
-            ["h4", c.title]
-            Don.map(s.content, ((s, skey) ->
-                ["div", {class: subcategory, "data-ref": ckey + "." + skey},
-                  ["h5", s.title]]
-            ))]
-            
-
-You can also use 'renderIn' and 'mapIn', which calls the template function within the given data, allowing for templates that access the 'this,' like:
-
-    articleTemplate = ->
-        ["article", {id: @id}
-            ["h3", @title]
-            ["div", 
-                @body]]

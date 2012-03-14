@@ -1,8 +1,12 @@
 (function() {
   var app, http, myblog, views;
+
   http = require('http');
+
   app = require('express').createServer();
+
   views = require('./views/views.js').views;
+
   myblog = {
     title: "my blog",
     articles: [
@@ -27,11 +31,15 @@
       }
     ]
   };
+
   app.get('/', function(req, res) {
     return res.send(views.home(myblog), {
       'Content-Type': 'text/html'
     }, 201);
   });
+
   app.listen(4000);
+
   console.log('Server running at http://localhost:4000/');
+
 }).call(this);
