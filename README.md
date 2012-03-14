@@ -18,6 +18,7 @@ These template functions are transformed into html by Don.render()
 All examples given in Coffeescript unless otherwise noted.
 
 Benefits:
+
 - Terse, but remains normal js
 - Use the bracket matching of your favourite editor
 - Js syntax checking can help spot malformed html
@@ -29,9 +30,14 @@ Benefits:
 Note: I've also included an experimental Ruby version.
 
 
+###Npm 
+
+    npm install don
+
+
 ###Node usage
     
-    Don = require('../don.js').Don
+    Don = require('don').Don
 
     articleTemplate = (data, key) ->
         ['article', {id: data.id + key}
@@ -116,3 +122,12 @@ examples:
                     
     htmlArray7 = []
     htmlArray8 = [['br'], ['br']]
+
+
+##Authors
+
+don.js was created by [Tim Farland](http://www.timfarland.com), a web product designer based in Berlin.
+
+##Disclaimer
+
+This is experimental code! I can't guarantee that it won't change or break something in your app. Don't sue me.

@@ -29,8 +29,6 @@ Don = ->
 
 
     toHtml = (arr) ->
-
-
         if isArray(arr[0])
                 res = ''
                 for elem in arr
