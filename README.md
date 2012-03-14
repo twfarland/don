@@ -11,9 +11,9 @@ Creator: [Tim Farland](http://timfarland.com)
 
 It is inspired by the use of lisp s-expressions to compose html, and by the use of pure javascript as a templating language ala Coffeekup, but it primarily makes use of js array and objects to represent html.
 
-Don templates are functions that return nested arrays (where variables are attached to 'this', like in Coffeekup)
+Don templates are functions that take an object and return normal js data adhering to a certain form.
 
-Template functions are transformed into html by Don.render()
+These template functions are transformed into html by Don.render()
 
 All examples given in Coffeescript unless otherwise noted.
 
@@ -40,7 +40,6 @@ All examples given in Coffeescript unless otherwise noted.
 You can use the power of closures to implement partials (a layout is a function that takes a template and returns a template):
 
     partial = (d) ->
-
         ['article', {id: d.id}
             ['h3', d.title]
             ['div'
@@ -48,9 +47,7 @@ You can use the power of closures to implement partials (a layout is a function 
                 ['a', {href: d.link}, d.anchor]]]     
      
     layout = (partial) ->
-
        (d) ->
-
           [['!doctype html']
            ['html'
                ['head'
