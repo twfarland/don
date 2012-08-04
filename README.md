@@ -9,7 +9,7 @@ Creator: [Tim Farland](http://timfarland.com)
 
 ##Don is an embedded templating DSL for Javascript
 
-It is inspired by the use of lisp s-expressions to compose html, and by the use of pure javascript as a templating language ala Coffeekup, but it primarily makes use of js array and objects to represent html.
+It is inspired by the use of lisp s-expressions to compose html, and by the use of pure javascript as a templating language ala Coffeekup, but it primarily makes use of js array and objects to represent html. It supports haml-style abbreviations.
 
 Don templates are functions that take an object and return normal js data adhering to a certain form.
 
@@ -73,6 +73,18 @@ You can use the power of closures to implement partials (a layout is a function 
                    ['section'
                        ['h1', d.title]
                        ['div', {class: 'articles'}, (partial a for a in d.articles)]]]]]    
+
+
+###Haml-style abbreviations
+
+You can place short ids and css classes in the tag position, and omit the tag if it is a div:
+
+    user = (d) ->
+         ['#profile'
+                ['img', {src: '/thumb/' + d.id, alt: d.name}]
+                ['.btn .settings', 'Settings']]
+
+    # => <div id="profile"><img src="/thumb/123" alt="John"><div class="btn settings">Settings</div></div>
 
 
 ###Render inside
