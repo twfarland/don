@@ -7,6 +7,7 @@ No license. Do what you want with this.
 Creator: [Tim Farland](http://timfarland.com)
 
 
+
 ##Don is an embedded templating DSL for Javascript
 
 It is inspired by the use of lisp s-expressions to compose html, and by the use of pure javascript as a templating language ala Coffeekup, but it primarily makes use of js array and objects to represent html. It supports haml-style abbreviations.
@@ -30,6 +31,19 @@ Benefits:
 Note: I've also included an experimental Ruby version.
 
 
+###BREAKING CHANGES! Upgrading from 0.1.0 to 0.2.0
+
+The code and api has been simplified - now `Don` is only a single function:
+
+    # Old
+    Don.render(data, template)
+    Don.renderIn(data, template)
+
+    # New
+    Don(template, data)
+    Don.call(data, template)
+
+
 ###Npm 
 
     npm install don
@@ -37,19 +51,21 @@ Note: I've also included an experimental Ruby version.
 
 ###Node usage
     
-    Don = require('don').Don
+    Don = require('don')
 
     articleTemplate = (data, key) ->
         ['article', {id: data.id + key}
             ['h3', data.title]
             ['div', data.body]]
                 
-    Don.render(
-       {id: 123, title: 'My Article', body: 'Article text'},
+    Don(
        articleTemplate
+       {id: 123, title: 'My Article', body: 'Article text'},
     )
                 
     # => '<article id="123"><h3>My Article</h3><div>Article text</div></article>'
+
+Also check out [don-express](https://www.npmjs.org/package/don-express) for easy integration into your Express app    
 
 
 ###Partials
@@ -86,15 +102,6 @@ You can place short ids and css classes in the tag position, and omit the tag if
 
     # => <div id="profile"><img src="/thumb/123" alt="John"><div class="btn settings">Settings</div></div>
 
-
-###Render inside
-
-You can also use 'renderIn', which calls the template function within the given data, allowing for templates that access the 'this,' like:
-
-    articleTemplate = ->
-        ['article', {id: @id}
-            ['h3', @title]
-            ['div', @body]]
 
 
 ###Acceptable forms
